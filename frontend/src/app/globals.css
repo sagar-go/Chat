@@ -1,0 +1,163 @@
+*
+{
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+body{
+    background-color: rgb(37, 37, 38);
+    color: #fff;
+}
+.chat-border
+{
+    border: 2px solid rgb(52, 52, 52);
+    border-radius: 10px;
+    box-shadow: 2px 1px 0px 2px rgb(52, 52, 52);
+
+}
+.chatLists{
+    height: 72.9vh;
+    overflow: hidden;
+    overflow-y: auto;
+    border-left: 5px solid rgb(52,52,52);
+}
+.chatLists::-webkit-scrollbar{
+    display: none;
+}
+.UserChat{
+    padding: 20px 20px;
+    cursor: pointer;
+    border-bottom: 2px solid rgb(52, 52, 52);
+}
+.UserChat.active{
+    padding: 20px 20px;
+    border-bottom: 1px solid #7B61FF ;
+    background:rgb(63 63 63 / 71%);
+
+}
+.UserChat:hover{
+    padding: 20px 20px;
+
+    background-color: rgb(30 30 30);
+}
+.UserChat .userdata{
+    display: flex;
+    gap: 10px;
+    justify-content: flex-start;
+    align-items: center;
+
+}
+.UserChat .userdata>p{
+    margin: 0;
+}
+.chatDataside
+{
+    padding: 30px 20px;
+    height: 72.9vh;
+    border-left: 5px solid rgb(52, 52, 52);
+
+
+}
+.chatHistory
+{
+    height: 58vh;
+    width: 100%;
+    overflow: hidden;
+    overflow-y: auto;
+
+}
+.chatHistory::-webkit-scrollbar{
+    display: none;
+}
+.userMessage
+{
+    margin-bottom: 24px;
+ 
+    margin-left: auto;
+    padding-left: 20px;
+    position: relative;
+} 
+.userMessage:hover span{
+    display: block;
+    position: absolute;
+    top: -5px;
+    right: 0px;
+    background: #000;
+    width: 20px;
+    padding: 5px;
+    cursor: pointer;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 50%;
+} 
+.userMessage span {
+    display: none;
+
+}
+
+.ClientMessage 
+{
+    margin-bottom: 24px;
+    margin-left: auto;
+    padding-right: 20px;
+}
+
+.ClientMessage > p {
+    background: #146c43;
+    width: fit-content;
+    padding: 10px;
+    border-radius: 8px 8px 8px 0px;
+    margin-bottom: 0;
+}
+.userMessage > p {
+    background: #7B61FF;
+    width: fit-content;
+    padding: 10px;
+    padding-right: 6%;
+    border-radius: 8px 8px 0px 8px;
+}
+.bg-voilet{
+    background-color:#7B61FF !important ;
+    border: 1px solid #7B61FF !important;
+}
+.bg-voilet:hover
+{
+    background-color:#6650d6 !important ;
+    border: 1px solid #6650d6 !important;
+}
+.ChatInput
+{
+    width: 90%;
+    border-radius: 100px;
+    border: 0;
+    margin-right: 10px;
+    margin-bottom: 12px;
+    height: 35px;
+    color: #ffff;
+    background: rgb(63 63 63 / 71%);
+    padding: 20px 30px;
+}
+.ChatInput:focus{
+    outline: none;
+}
+.chatDiv
+{
+    position: absolute;
+    width: 100%;
+    bottom: 0;
+    background:  rgb(37, 37, 38);
+    left: 0;
+    padding: 10px;
+}
+.chat-Send-Btn
+{
+    height: 38px;
+    width: 38px;
+    padding: 1;
+    border: 0;
+    border-radius: 100%;
+    background: #7B61FF;
+    color: #fff;
+}

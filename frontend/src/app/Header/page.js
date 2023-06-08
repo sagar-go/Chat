@@ -110,9 +110,19 @@ const Header = () => {
   };
   console.log(groupIds, "groupIdsgroupIds");
   return (
-    <div>
-      <button onClick={handleNewChat}>New Chat + </button>
-      <button onClick={handleNewGroupChat}>New GROUP Chat + </button>
+    <div className="container">
+      <button
+        className="btn btn-primary bg-voilet rounded-2"
+        onClick={handleNewChat}
+      >
+        New Chat +{" "}
+      </button>
+      <button
+        className="btn btn-success mx-3 rounded-2"
+        onClick={handleNewGroupChat}
+      >
+        New GROUP Chat +{" "}
+      </button>
       <div>
         <Modal show={show} onHide={handleClose}>
           <Modal.Body>
@@ -122,7 +132,10 @@ const Header = () => {
                   <>
                     {!isGroupChat ? (
                       <div key={ind}>
-                        <button onClick={() => createNewChat(e._id)}>
+                        <button
+                          className="btn btn-primary"
+                          onClick={() => createNewChat(e._id)}
+                        >
                           {e.name}
                         </button>
                       </div>
@@ -130,7 +143,6 @@ const Header = () => {
                       <>
                         <input
                           type="checkbox"
-                          id="vehicle1"
                           name={e.name}
                           value={e._id}
                           onChange={() => {
@@ -144,7 +156,7 @@ const Header = () => {
                             console.log(e._id);
                           }}
                         />
-                        <label>{e.name}</label>
+                        <label className="btn btn-primary">{e.name}</label>
                         <br />
                       </>
                     )}

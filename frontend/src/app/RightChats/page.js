@@ -32,20 +32,40 @@ const RightChats = () => {
   console.log("From Right Page ");
   const fetchAllChatMessages = async () => {
     // setChatId(chatId);
-    const data = await axios.get(
-      `http://localhost:5000/message/fetchMessage/${chatId}`,
-      config
-    );
+    const data = await axios
+      .get(`http://localhost:5000/message/fetchMessage/${chatId}`, config)
+      .then((e) => {
+        console.log(e.data.length, "eeeeeeeeeeee");
+        setSoloMsgs(e.data);
+      });
     // socket.emit("join chat", fetchChatId);
-    if (data) {
-      setSoloMsgs(data.data);
-    }
+    // if (data) {
+
+    // }
+  };
+
+  const setActive = (index) => {
+    console.log(index);
+    const activeDiv = document.getElementById(`ActiveMessage_${index}`);
+    console.log(activeDiv, "opasdpaosdasd");
+    activeDiv?.scrollIntoView({
+      block: "end",
+      behavior: "smooth",
+      inline: "nearest",
+    });
   };
   useEffect(() => {
     if (chatId) {
       fetchAllChatMessages();
+      // setActive(soloMsgs.length - 2);
     }
   }, [chatId]);
+
+  useEffect(() => {
+    if (soloMsgs && soloMsgs.length > 0) {
+      setActive(soloMsgs.length - 1);
+    }
+  }, [soloMsgs.length]);
 
   const sendSingleMessage = async (e) => {
     e.preventDefault();
@@ -128,55 +148,71 @@ const RightChats = () => {
   };
   console.log(chatId, "chatIdchatId");
 
+  const messagesEndRef = useRef(null);
+
+  // const scrollToBottom = () => {
+  //   messagesEndRef.current.scrollIntoView({ block: "end" });
+  // };
+
+  // useEffect(setActive(soloMsgs.length - 1), [soloMsgs.length]);
+
   return (
     <>
-      <div style={{ width: "80%", border: "2px solid green" }}>
-        {chatId && (
-          <div>
-            {soloMsgs &&
-              soloMsgs.map((ele, ind) => {
-                return (
-                  <div>
-                    {ele.sender._id === user._id ? (
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-end",
-                        }}
-                      >
-                        <p
-                          style={{ border: "1px solid green" }}
-                          onClick={() => handleDeleteMessage(ele._id, ind)}
-                          key={Math.random()}
-                        >
-                          {ele.content}
-                        </p>
-                        <img src={ele.sender.pic} width={50} />
-                      </div>
-                    ) : (
-                      <div
-                        style={{
-                          display: "flex",
-                          justifyContent: "flex-start",
-                        }}
-                      >
-                        <img src={ele.sender.pic} width={50} />
+      <div className="chatDataside position-relative">
+        <div className="chatHistory">
+          {chatId && (
+            <>
+              {soloMsgs && soloMsgs.length > 0 ? (
+                soloMsgs.map((ele, ind) => {
+                  return (
+                    <div id={`ActiveMessage_${ind}`}>
+                      {ele.sender._id === user._id ? (
+                        <div className="userMessage d-flex justify-content-end gap-3 align-items-center">
+                          <p className="m-0" key={Math.random()}>
+                            {ele.content}
+                          </p>
+                          <span
+                            onClick={() => handleDeleteMessage(ele._id, ind)}
+                          >
+                            x
+                          </span>
 
-                        <p key={Math.random()}>{ele.content}</p>
-                      </div>
-                    )}
-                    <br></br>
-                  </div>
-                );
-              })}
-            <br></br>
-            <br></br>
-            <form onSubmit={sendSingleMessage}>
-              <input ref={inputRef} />
-              <button>Send</button>
-            </form>
-          </div>
-        )}
+                          {/* <img src={ele.sender.pic} width={50} /> */}
+                        </div>
+                      ) : (
+                        <div className="ClientMessage d-flex justify-content-start  gap-3 align-items-center">
+                          <img src={ele.sender.pic} width={50} />
+
+                          <p key={Math.random()}>{ele.content}</p>
+                        </div>
+                      )}
+                    </div>
+                  );
+                })
+              ) : (
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    alignItems: "center",
+                    width: "100%",
+                    height: "100%",
+                  }}
+                >
+                  <p>Start Chatting with each other</p>
+                </div>
+              )}
+            </>
+          )}
+        </div>
+        <div className="chatDiv">
+          <form onSubmit={sendSingleMessage}>
+            <div style={{ display: "flex" }}>
+              <input className="ChatInput shadow-2" ref={inputRef} />
+              <button className="chat-Send-Btn shadow-2">Go</button>
+            </div>
+          </form>
+        </div>
       </div>
     </>
   );

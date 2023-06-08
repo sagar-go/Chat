@@ -8,6 +8,7 @@ const LeftChats = () => {
     chats,
     setChats,
     user,
+    chatId,
     fetchChatId,
     setFetechChatId,
     socket,
@@ -49,18 +50,14 @@ const LeftChats = () => {
 
   return (
     <>
-      <div
-        style={{
-          border: "2px solid green",
-        }}
-      >
+      <div className="chatLists  rounded-3">
         {chats &&
           chats.map((e, ind) => {
             return (
               <div
-                style={{
-                  border: "2px solid red",
-                }}
+                className={`${
+                  e._id === chatId ? "UserChat active" : "UserChat"
+                }`}
                 onClick={() => {
                   console.log(e._id);
                   setChatId(e._id);
@@ -69,25 +66,30 @@ const LeftChats = () => {
                 key={ind}
               >
                 {e.isGroupChat && (
-                  <div>
+                  <div className="userdata ">
                     <img width={50} src={e.groupPic} /> <p>{e.chatName}</p>
                   </div>
                 )}
                 {e.users.map((ele) => {
                   if (ele.email !== user?.email && !e.isGroupChat) {
                     return (
-                      <div key={Math.random()}>
-                        <img width={50} src={ele.pic} />
+                      <div className="userdata" key={Math.random()}>
+                        <img
+                          width={50}
+                          height={50}
+                          style={{ borderRadius: "50%", objectFit: "cover" }}
+                          src={ele.pic}
+                        />
                         <p>{!e.isGroupChat && ele.name}</p>
                       </div>
                     );
                   }
                 })}
-                <p>
+                {/* <p>
                   {e.latestMessage
                     ? e.latestMessage?.content
                     : "START CHATTING"}
-                </p>
+                </p> */}
               </div>
             );
           })}

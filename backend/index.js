@@ -23,9 +23,14 @@ mongoose
 
 // app.use("/auth", authRoute);
 
-const server = app.listen(5000, (req, res) =>
+const server = app.listen(process.env.DB_PORT, (req, res) =>
   console.log("SERVER IS RUNNING !!!!!!!!!!!!")
 );
+
+app.get("/", (req, res) => {
+  return res.send("WORKING");
+});
+
 app.use("/chat", userRoutes);
 app.use("/mainchat", chatRoutes);
 app.use("/message", messageRoute);
