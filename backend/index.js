@@ -38,7 +38,7 @@ app.use("/message", messageRoute);
 const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
-    origin: "https://chat-6u9h-sagar-go.vercel.app/",
+    origin: "*",
     // credentials: true,
   },
 });
