@@ -4,6 +4,7 @@ import Modal from "react-bootstrap/Modal";
 import Button from "react-bootstrap/Button";
 import { useMyContext } from "../MyContext";
 import axios from "axios";
+import { Api_URL } from "../utils/util";
 
 const Header = () => {
   const [show, setShow] = useState(false);
@@ -48,7 +49,7 @@ const Header = () => {
   const fetchAllUsers = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/mainchat/getUser",
+        `${Api_URL}/mainchat/getUser`,
         {},
         config
       );
@@ -67,7 +68,7 @@ const Header = () => {
   const createNewChat = async (id) => {
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/mainchat/createChat",
+        `${Api_URL}/mainchat/createChat`,
         { userId: id },
         config
       );
@@ -96,7 +97,7 @@ const Header = () => {
   const createNewGroupChat = async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/mainchat/createGroupChat",
+        `${Api_URL}/mainchat/createGroupChat`,
         { name: inputRef.current.value, users: JSON.stringify(groupIds) },
         config
       );

@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, memo, useState } from "react";
 import { useMyContext } from "../MyContext";
 import axios from "axios";
+import { Api_URL } from "../utils/util";
 
 const LeftChats = () => {
   const {
@@ -29,7 +30,7 @@ const LeftChats = () => {
   const fetchChats = useCallback(async () => {
     try {
       const { data } = await axios.post(
-        "http://localhost:5000/mainchat/fetchChats",
+        `${Api_URL}/mainchat/fetchChats`,
         {},
         config
       );

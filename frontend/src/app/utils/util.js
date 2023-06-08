@@ -12,3 +12,5 @@ const fetchChats = async () => {
     console.error("Error fetching data:", error);
   }
 };
+
+export const Api_URL = "https://chat-app-2ynw.onrender.com";

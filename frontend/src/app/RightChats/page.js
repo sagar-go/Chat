@@ -2,6 +2,7 @@
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useMyContext } from "../MyContext";
 import axios from "axios";
+import { Api_URL } from "../utils/util";
 
 const RightChats = () => {
   const {
@@ -33,7 +34,7 @@ const RightChats = () => {
   const fetchAllChatMessages = async () => {
     // setChatId(chatId);
     const data = await axios
-      .get(`http://localhost:5000/message/fetchMessage/${chatId}`, config)
+      .get(`${Api_URL}/message/fetchMessage/${chatId}`, config)
       .then((e) => {
         console.log(e.data.length, "eeeeeeeeeeee");
         setSoloMsgs(e.data);
@@ -70,7 +71,7 @@ const RightChats = () => {
   const sendSingleMessage = async (e) => {
     e.preventDefault();
     const data = await axios.post(
-      `http://localhost:5000/message/sendMessage`,
+      `${Api_URL}/message/sendMessage`,
       { content: inputRef.current.value, chatId: chatId },
       config
     );
@@ -131,7 +132,7 @@ const RightChats = () => {
 
   const handleDeleteMessage = async (id, index) => {
     const { data } = await axios.post(
-      `http://localhost:5000/message/deleteMessage`,
+      `${Api_URL}/message/deleteMessage`,
       { messageId: id },
       config
     );

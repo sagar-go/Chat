@@ -3,6 +3,7 @@ import React, { useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMyContext } from "../MyContext";
+import { Api_URL } from "../utils/util";
 
 const Page = () => {
   const [email, setEmail] = useState("");
@@ -21,7 +22,7 @@ const Page = () => {
 
     const data = await axios
       .post(
-        "http://localhost:5000/chat/login",
+        `${Api_URL}/chat/login`,
         { email: email, password: password },
         config
       )
