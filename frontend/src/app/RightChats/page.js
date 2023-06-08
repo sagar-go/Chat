@@ -1,4 +1,4 @@
-"use Client";
+"use client";
 import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useMyContext } from "../MyContext";
 import axios from "axios";
