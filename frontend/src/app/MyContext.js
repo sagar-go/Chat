@@ -2,7 +2,7 @@
 import React, { createContext, useContext, useEffect, useState } from "react";
 
 const ChatContext = createContext();
-const PORT = "https://chat-app-2ynw.onrender.com/";
+const PORT = "https://chat-yvhx.onrender.com";
 import io from "socket.io-client";
 let socket;
 export const MyContext = ({ children }) => {
