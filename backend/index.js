@@ -8,7 +8,7 @@ const chatRoutes = require("../backend/routes/chatRoute");
 const messageRoute = require("../backend/routes/messageRoute");
 
 const cors = require("cors");
-app.use(cors());
+// app.use(cors());
 
 dotEnv.config();
 
@@ -45,6 +45,7 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
+  io.set("origins", "*");
   console.log("Connected to socket.io");
 
   socket.on("setup", (userData) => {
@@ -99,5 +100,10 @@ io.on("connection", (socket) => {
     //     socket.in(user._id).emit("message recieved", newMessageRecieved);
     //   }
     // });
+  });
+
+  socket.off("setup", () => {
+    console.log("USER DISCONNECTED");
+    socket.leave(userData._id);
   });
 });
