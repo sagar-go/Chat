@@ -2,13 +2,12 @@ const express = require("express");
 const app = express();
 const dotEnv = require("dotenv");
 const mongoose = require("mongoose");
-
+const cors = require("cors");
 const userRoutes = require("../backend/routes/userRoutes");
 const chatRoutes = require("../backend/routes/chatRoute");
 const messageRoute = require("../backend/routes/messageRoute");
 
-const cors = require("cors");
-// app.use(cors());
+app.use(cors());
 
 dotEnv.config();
 
@@ -39,7 +38,7 @@ const io = require("socket.io")(server, {
   pingTimeout: 60000,
   cors: {
     origin: "*",
-    methods: ["GET", "POST", "PUT", "DELETE"],
+    // methods: ["GET", "POST", "PUT", "DELETE"],
     // credentials: true,
   },
 });
