@@ -15,7 +15,6 @@ const Protected = (WrappedComponent) => {
       return token;
     };
     useEffect(() => {
-      // Redirect to login page if user is not authenticated
       if (!isAuthenticated()) {
         router.push("/");
       }
