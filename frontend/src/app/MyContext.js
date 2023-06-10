@@ -48,8 +48,10 @@ export const MyContext = ({ children }) => {
       console.error("Error fetching data:", error);
     }
   };
-
-  window.addEventListener("beforeunload", handleUnload);
+  if (typeof window !== "undefined") {
+    // Access the window object and perform client-side actions
+    window.addEventListener("beforeunload", handleUnload);
+  }
 
   function handleUnload() {
     // Close the Socket.IO connection when the browser is closed or the page is unloaded
