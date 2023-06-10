@@ -6,6 +6,7 @@ const cors = require("cors");
 const userRoutes = require("../backend/routes/userRoutes");
 const chatRoutes = require("../backend/routes/chatRoute");
 const messageRoute = require("../backend/routes/messageRoute");
+const userModel = require("./models/userModel");
 
 app.use(cors());
 
@@ -44,65 +45,56 @@ const io = require("socket.io")(server, {
 });
 
 io.on("connection", (socket) => {
-  // io.set("origins", "*");
   console.log("Connected to socket.io");
 
-  socket.on("setup", (userData) => {
-    console.log(userData?._id, "userDDDDDD");
+  socket.on("setup", async (userData) => {
     socket.join(userData?._id);
     socket.emit("connected");
+    await userModel.findByIdAndUpdate(
+      { _id: userData?._id },
+      { isOnline: true }
+    );
+    socket.broadcast.emit("user online", "world");
   });
 
   socket.on("join chat", (room) => {
     socket.join(room);
-    console.log("User Joined Room: " + room);
   });
 
   socket.on("new message", (newMessageRecieved) => {
     let chat = newMessageRecieved.chat;
-    console.log(newMessageRecieved, "CCCCCCCCCCCCCCCCCCCc");
-    // console.log('chat',chat)
     if (!chat.users) return console.log("chat.users not defined");
 
     chat.users.forEach((user) => {
       if (user._id === newMessageRecieved.sender._id) {
         return;
       } else {
-        console.log("YESSSSSSSSSSSSS", user._id);
         socket.in(user._id).emit("message recieved", newMessageRecieved);
       }
     });
   });
   socket.on("message delete", (newMessageRecieved) => {
-    console.log(newMessageRecieved, "eeeeiedsasdqwe");
     newMessageRecieved &&
       newMessageRecieved.chatIds.forEach((ids) => {
         socket.in(ids).emit("message delete2", newMessageRecieved.data);
       });
-    // console.log(
-    //   newMessageRecieved.chatId,
-    //   "newMessageRecievednewMessageRecieved"
-    // );
-    // socket
-    //   .in(newMessageRecieved.chatId)
-    //   .emit("message recieved", newMessageRecieved.data);
-    // let chat = newMessageRecieved.chat;
-    // console.log(chat, "CCCCCCCCCCCCCCCCCCCc");
-    // // console.log('chat',chat)
-    // if (!chat.users) return console.log("chat.users not defined");
-
-    // chat.users.forEach((user) => {
-    //   if (user._id === newMessageRecieved.sender._id) {
-    //     return;
-    //   } else {
-    //     console.log("YESSSSSSSSSSSSS", user._id);
-    //     socket.in(user._id).emit("message recieved", newMessageRecieved);
-    //   }
-    // });
   });
 
-  socket.off("setup", () => {
-    console.log("USER DISCONNECTED");
+  socket.on("setup leave", async (userData) => {
+    await userModel.findByIdAndUpdate(
+      { _id: userData?._id },
+      { isOnline: false }
+    );
+    socket.broadcast.emit("user online", "world");
+    socket.leave(userData._id);
+  });
+
+  socket.on("leaving", async (userData) => {
+    await userModel.findByIdAndUpdate(
+      { _id: userData?._id },
+      { isOnline: false }
+    );
+    socket.broadcast.emit("user online", "world");
     socket.leave(userData._id);
   });
 });

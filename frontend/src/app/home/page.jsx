@@ -2,11 +2,14 @@
 import LeftChats from "../LeftChats/page";
 import RightChats from "../RightChats/page";
 import Header from "../Header/page";
+import Protected from "../ProtectedRoute/page";
+import { useMyContext } from "../MyContext";
 
 const HOME = () => {
+  const { user } = useMyContext();
   return (
     <div className="container">
-      <h1 className="my-4">Home</h1>
+      <h3 className="my-4">Welcome {user && user.name} !!!</h3>
       <Header />
       <div
         className="container mt-3 rounded-3 "
@@ -25,4 +28,4 @@ const HOME = () => {
   );
 };
 
-export default HOME;
+export default Protected(HOME);

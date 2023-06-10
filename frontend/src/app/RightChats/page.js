@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, useRef, useState } from "react";
 import { useMyContext } from "../MyContext";
 import axios from "axios";
 import { Api_URL } from "../utils/util";
+import { ToastContainer, toast } from "react-toastify";
 
 const RightChats = () => {
   const {
@@ -16,10 +17,13 @@ const RightChats = () => {
     input,
     setInput,
     setChats,
+    activeChatUsers,
   } = useMyContext();
   const inputRef = useRef(null);
 
   const [newMessageRecieved, setNewMessageRecieved] = useState(null);
+
+  const notify = () => toast("Wow so easy!");
 
   const config = {
     headers: {
@@ -30,25 +34,17 @@ const RightChats = () => {
     },
   };
 
-  console.log("From Right Page ");
   const fetchAllChatMessages = async () => {
     // setChatId(chatId);
     const data = await axios
       .get(`${Api_URL}/message/fetchMessage/${chatId}`, config)
       .then((e) => {
-        console.log(e.data.length, "eeeeeeeeeeee");
         setSoloMsgs(e.data);
       });
-    // socket.emit("join chat", fetchChatId);
-    // if (data) {
-
-    // }
   };
 
   const setActive = (index) => {
-    console.log(index);
     const activeDiv = document.getElementById(`ActiveMessage_${index}`);
-    console.log(activeDiv, "opasdpaosdasd");
     activeDiv?.scrollIntoView({
       block: "end",
       behavior: "smooth",
@@ -58,7 +54,6 @@ const RightChats = () => {
   useEffect(() => {
     if (chatId) {
       fetchAllChatMessages();
-      // setActive(soloMsgs.length - 2);
     }
   }, [chatId]);
 
@@ -70,21 +65,23 @@ const RightChats = () => {
 
   const sendSingleMessage = async (e) => {
     e.preventDefault();
-    const data = await axios.post(
-      `${Api_URL}/message/sendMessage`,
-      { content: inputRef.current.value, chatId: chatId },
-      config
-    );
-    socket.emit("new message", data.data);
-    setSoloMsgs([...soloMsgs, data.data]);
-    inputRef.current.value = "";
+    if (inputRef.current.value !== "") {
+      const data = await axios.post(
+        `${Api_URL}/message/sendMessage`,
+        { content: inputRef.current.value, chatId: chatId },
+        config
+      );
+      socket.emit("new message", data.data);
+      setSoloMsgs([...soloMsgs, data.data]);
+      inputRef.current.value = "";
+    } else {
+      notify();
+    }
   };
 
   useEffect(() => {
     socket &&
       socket.on("message recieved", (newMessageRecieved) => {
-        console.log("pppppppppppp123123123", newMessageRecieved);
-        // setNewMessageRecieved(newMessageRecieved);
         if (
           !chatId || // if chat is not selected or doesn't match current chat
           chatId !== newMessageRecieved.chat._id
@@ -94,10 +91,8 @@ const RightChats = () => {
           //   setFetchAgain(!fetchAgain);
           // }
           // props.fetchChats();
-          console.log(chatId, newMessageRecieved, "pppppppppppp", user);
           // fetchChats();
         } else {
-          console.log("pppppppppppp111", newMessageRecieved);
           setSoloMsgs([...soloMsgs, newMessageRecieved]);
         }
       });
@@ -106,7 +101,6 @@ const RightChats = () => {
   useEffect(() => {
     socket &&
       socket.on("message delete2", (newMessageRecieved) => {
-        console.log("pppppppppppp123123123", newMessageRecieved);
         // setNewMessageRecieved(newMessageRecieved);
         if (
           !chatId || // if chat is not selected or doesn't match current chat
@@ -117,10 +111,8 @@ const RightChats = () => {
           //   setFetchAgain(!fetchAgain);
           // }
           // props.fetchChats();
-          console.log(chatId, newMessageRecieved, "pppppppppppp", user);
           // fetchChats();
         } else {
-          console.log("pppppppppppp111", newMessageRecieved);
           let temp = [...soloMsgs];
           let result = temp.filter(
             (ele, ind) => ele._id !== newMessageRecieved._id
@@ -136,10 +128,9 @@ const RightChats = () => {
       { messageId: id },
       config
     );
-    console.log("iddd", data);
     socket.emit("message delete", {
       data: data.data,
-      chatIds: ["6475c5f9af74efff3811b548", "6475c611af74efff3811b54b"],
+      chatIds: activeChatUsers,
     });
 
     let temp = [...soloMsgs];
@@ -147,16 +138,6 @@ const RightChats = () => {
     setSoloMsgs(result);
     // setSoloMsgs([...soloMsgs, data.data]);
   };
-  console.log(chatId, "chatIdchatId");
-
-  const messagesEndRef = useRef(null);
-
-  // const scrollToBottom = () => {
-  //   messagesEndRef.current.scrollIntoView({ block: "end" });
-  // };
-
-  // useEffect(setActive(soloMsgs.length - 1), [soloMsgs.length]);
-
   return (
     <>
       <div className="chatDataside position-relative">
@@ -206,14 +187,16 @@ const RightChats = () => {
             </>
           )}
         </div>
-        <div className="chatDiv">
-          <form onSubmit={sendSingleMessage}>
-            <div style={{ display: "flex" }}>
-              <input className="ChatInput shadow-2" ref={inputRef} />
-              <button className="chat-Send-Btn shadow-2">Go</button>
-            </div>
-          </form>
-        </div>
+        {chatId && (
+          <div className="chatDiv">
+            <form onSubmit={sendSingleMessage}>
+              <div style={{ display: "flex" }}>
+                <input className="ChatInput shadow-2" ref={inputRef} />
+                <button className="chat-Send-Btn shadow-2">Go</button>
+              </div>
+            </form>
+          </div>
+        )}
       </div>
     </>
   );

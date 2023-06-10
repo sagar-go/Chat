@@ -3,8 +3,6 @@ const User = require("../models/userModel");
 
 const accessChat = async (req, res) => {
   const { userId } = req.body;
-  console.log("req.user._id", req.user._id);
-
   if (!userId) {
     // console.log("UserId param not sent with request");
     return res.status(400).send("Please send User Id");

@@ -75,13 +75,10 @@ const Header = () => {
       if (data.success === false) {
         setChatId(data.data._id);
         socket.emit("join chat", data.data._id);
-        console.log(data, "ooiid");
         setShow(false);
-
         return;
       }
 
-      console.log("VVVVVVVVVVVVVV");
       setChats([...chats, data]);
       setShow(false);
     } catch (error) {
@@ -109,7 +106,6 @@ const Header = () => {
       console.error("Error fetching data:", error);
     }
   };
-  console.log(groupIds, "groupIdsgroupIds");
   return (
     <div className="container">
       <button
@@ -141,7 +137,7 @@ const Header = () => {
                         </button>
                       </div>
                     ) : (
-                      <>
+                      <div>
                         <input
                           type="checkbox"
                           name={e.name}
@@ -154,21 +150,20 @@ const Header = () => {
                               let res = temp.filter((ele) => ele !== e._id);
                               setGroupIds(res);
                             }
-                            console.log(e._id);
                           }}
                         />
                         <label className="btn btn-primary">{e.name}</label>
                         <br />
-                      </>
+                      </div>
                     )}
                   </>
                 );
               })}
             {isGroupChat && (
-              <>
+              <div>
                 <input ref={inputRef} />
                 <button onClick={createNewGroupChat}>CREATE GROUP CHAT</button>
-              </>
+              </div>
             )}
           </Modal.Body>
         </Modal>

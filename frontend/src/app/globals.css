@@ -121,13 +121,14 @@ body{
 .bg-voilet{
     background-color:#7B61FF !important ;
     border: 1px solid #7B61FF !important;
+    color: white;
 }
 .bg-voilet:hover
 {
     background-color:#6650d6 !important ;
     border: 1px solid #6650d6 !important;
 }
-.ChatInput
+.ChatInput,.ChatInput[type="file"]
 {
     width: 90%;
     border-radius: 100px;
@@ -138,9 +139,40 @@ body{
     color: #ffff;
     background: rgb(63 63 63 / 71%);
     padding: 20px 30px;
+    position: relative;
+}
+.ChatInput::placeholder{
+    color: lightgray;
+}
+.ChatInput[type="file"]
+{
+    opacity: 0;
 }
 .ChatInput:focus{
     outline: none;
+}
+.ChatInput span{
+    position: absolute;
+    top: -6px;
+    color: lightgray;
+}
+.pointer{
+    cursor: pointer;
+}
+.mein-image
+{
+    width: 74px;
+    margin: auto;
+    margin-bottom: 24px;
+    height: 74px;
+    border-radius: 100%;
+    overflow: hidden;
+}
+.mein-image img
+{
+width: 100%;
+height: 100%;
+object-fit: cover;
 }
 .chatDiv
 {
@@ -160,4 +192,18 @@ body{
     border-radius: 100%;
     background: #7B61FF;
     color: #fff;
+}
+.LoginPage
+{
+    width: 100%;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+}
+.LoginPage form
+{
+    display: block;
+    margin: auto;
 }

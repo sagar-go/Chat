@@ -13,4 +13,4 @@ const fetchChats = async () => {
   }
 };
 
-export const Api_URL = "https://chat-yvhx.onrender.com";
+export const Api_URL = "http://localhost:5000";

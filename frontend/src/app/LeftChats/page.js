@@ -3,6 +3,7 @@ import React, { useCallback, useEffect, memo, useState } from "react";
 import { useMyContext } from "../MyContext";
 import axios from "axios";
 import { Api_URL } from "../utils/util";
+import { BsCircleFill } from "react-icons/bs";
 
 const LeftChats = () => {
   const {
@@ -10,12 +11,10 @@ const LeftChats = () => {
     setChats,
     user,
     chatId,
-    fetchChatId,
-    setFetechChatId,
-    socket,
-    input,
     setChatId,
-    soloMsgs,
+    activeChatUsers,
+    setActiveChatUsers,
+    socket,
   } = useMyContext();
 
   const config = {
@@ -36,17 +35,14 @@ const LeftChats = () => {
       );
       if (data) {
         setChats(data);
-        console.log("pppppppppppp4444444444444444443");
       }
     } catch (error) {
       console.error("Error fetching data:", error);
     }
   }, []);
-  console.log("RENDERED LEFT PAGE");
 
   useEffect(() => {
     fetchChats();
-    console.log("pppppppppppp3333333333333");
   }, []);
 
   return (
@@ -60,9 +56,10 @@ const LeftChats = () => {
                   e._id === chatId ? "UserChat active" : "UserChat"
                 }`}
                 onClick={() => {
-                  console.log(e._id);
                   setChatId(e._id);
                   socket.emit("join chat", e._id);
+                  let data = e.users.map((ele) => ele._id);
+                  setActiveChatUsers(data);
                 }}
                 key={ind}
               >
@@ -82,6 +79,11 @@ const LeftChats = () => {
                           src={ele.pic}
                         />
                         <p>{!e.isGroupChat && ele.name}</p>
+                        {!e.isGroupChat && ele.isOnline ? (
+                          <BsCircleFill size={10} color="green" />
+                        ) : (
+                          <BsCircleFill size={10} color="red" />
+                        )}
                       </div>
                     );
                   }
