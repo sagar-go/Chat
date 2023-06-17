@@ -1,7 +1,6 @@
 const User = require("../models/userModel");
-const generateToken = require("../utils/util");
 const jwt = require("jsonwebtoken");
-
+const bcrypt = require("bcryptjs");
 //@description     Get or Search all users
 //@route           GET /api/user?search=
 //@access          Public
@@ -23,7 +22,7 @@ const allUsers = async (req, res) => {
 //@route           POST /api/user/
 //@access          Public
 const registerUser = async (req, res) => {
-  const { name, email, password, pic } = req.body;
+  const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
     res.status(400);
@@ -33,26 +32,24 @@ const registerUser = async (req, res) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-   return res.status(200).send('User already Exists');
+    return res.status(200).send("User already Exists");
     // throw new Error("User already exists");
   }
 
+  const salt = await bcrypt.genSalt(5); //complexity of salt generation
+  const hashpassword = await bcrypt.hash(req.body.password, salt); // password hashing
 
   const user = await User.create({
     name,
     email,
-    password,
-    pic,
-  })
-  
-  if (user) {
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.TOKEN_SECRET
-    );
-  
+    password: hashpassword,
+    pic: req.file.filename,
+  });
 
-  return  res.status(201).send({
+  if (user) {
+    const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
+
+    return res.status(201).send({
       _id: user._id,
       name: user.name,
       email: user.email,
@@ -61,8 +58,7 @@ const registerUser = async (req, res) => {
       token: token,
     });
   } else {
-  return  res.status(400).send('Some Error');
-    throw new Error("User not found");
+    return res.status(400).send("Some Error");
   }
 };
 
@@ -73,36 +69,43 @@ const authUser = async (req, res) => {
   const { email, password } = req.body;
 
   const user = await User.findOne({ email });
-  if(!user){
-    return res.status(200).send({success:false,message:"Invalid Email or Password"});
-  }else{
-
-    const token = jwt.sign(
-      { id: user._id },
-      process.env.TOKEN_SECRET
+  if (!user) {
+    return res
+      .status(200)
+      .send({ success: false, message: "Invalid Email or Password" });
+  } else {
+    const validPassword = await bcrypt.compare(
+      req.body.password,
+      user.password
     );
-  
+
+    if (!validPassword) {
+      return res
+        .status(200)
+        .send({ message: "Invalid Password", success: false });
+    }
+
+    const token = jwt.sign({ id: user._id }, process.env.TOKEN_SECRET);
 
     return res.send({
-      success:true,
-      data:{
+      success: true,
+      data: {
         _id: user._id,
         name: user.name,
         email: user.email,
         isAdmin: user.isAdmin,
         pic: user.pic,
         token: token,
-      }
-   
+      },
     });
-
   }
-
-
-
-
-    
-  
 };
 
-module.exports = { allUsers, registerUser, authUser };
+const setSocketId = async (req, res) => {
+  const data = await User.findByIdAndUpdate(req.body.userId, {
+    socketId: req.body.socketId,
+  });
+  return res.send(req.body.socketId);
+};
+
+module.exports = { allUsers, registerUser, authUser, setSocketId };

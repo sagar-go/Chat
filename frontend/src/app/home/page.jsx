@@ -9,7 +9,7 @@ const HOME = () => {
   const { user } = useMyContext();
   return (
     <div className="container">
-      <h3 className="my-4">Welcome {user && user.name} !!!</h3>
+      {<h3 className="my-4">Welcome {user && user.name} !!!</h3>}
       <Header />
       <div
         className="container mt-3 rounded-3 "

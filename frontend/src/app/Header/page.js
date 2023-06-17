@@ -22,19 +22,15 @@ const Header = () => {
   };
 
   const {
-    user,
-    fetchChatId,
-    chatId,
     setChatId,
-    soloMsgs,
-    setSoloMsgs,
+
     socket,
-    input,
-    setInput,
+
     chats,
     setChats,
     allUsers,
     setAllUsers,
+    socketId,
   } = useMyContext();
 
   const config = {
@@ -73,12 +69,13 @@ const Header = () => {
         config
       );
       if (data.success === false) {
+        // success false means chat already exists
         setChatId(data.data._id);
-        socket.emit("join chat", data.data._id);
+
         setShow(false);
         return;
       }
-
+      socket.emit("chat create", id);
       setChats([...chats, data]);
       setShow(false);
     } catch (error) {
@@ -126,7 +123,7 @@ const Header = () => {
             {allUsers &&
               allUsers.map((e, ind) => {
                 return (
-                  <>
+                  <div key={e._id}>
                     {!isGroupChat ? (
                       <div key={ind}>
                         <button
@@ -156,7 +153,7 @@ const Header = () => {
                         <br />
                       </div>
                     )}
-                  </>
+                  </div>
                 );
               })}
             {isGroupChat && (

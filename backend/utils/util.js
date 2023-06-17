@@ -3,6 +3,7 @@ const jwt_decode = require("jwt-decode");
 const jwt = require("jsonwebtoken");
 
 const User = require("../models/userModel");
+const multer = require("multer");
 
 const generateToken = (id) => {
   return jwt.sign({ id }, process.env.JWT_SECRET, {
@@ -46,4 +47,24 @@ const protect = async (req, res, next) => {
   }
 };
 
-module.exports = { jwtDecode, roles, generateToken, protect };
+const whitelist = ["image/png", "image/jpeg", "image/jpg", "image/webp"];
+
+let mydata;
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: "uploads",
+    filename: (req, file, cb) => {
+      const name = file.originalname;
+      cb(null, `${new Date().getTime()}-${name}`);
+    },
+  }),
+
+  fileFilter: (req, file, cb) => {
+    if (!whitelist.includes(file.mimetype)) {
+      return cb(new Error("file is not allowed"));
+    }
+    cb(null, file);
+  },
+});
+
+module.exports = { jwtDecode, roles, generateToken, protect, upload };

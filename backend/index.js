@@ -36,7 +36,7 @@ app.use("/mainchat", chatRoutes);
 app.use("/message", messageRoute);
 
 const io = require("socket.io")(server, {
-  pingTimeout: 60000,
+  pingTimeout: 1000,
   cors: {
     origin: "*",
     // methods: ["GET", "POST", "PUT", "DELETE"],
@@ -44,17 +44,37 @@ const io = require("socket.io")(server, {
   },
 });
 
+app.use("/uploads", express.static("uploads"));
+
 io.on("connection", (socket) => {
   console.log("Connected to socket.io");
 
+  socket.on("disconnect", (reason) => {
+    if (reason === "ping timeout") {
+      // Perform actions when a ping timeout occurs
+      // console.log("Ping timeout occurred for :", socket.id);
+      // Perform custom cleanup or other operations
+      // For example, you might remove the disconnected socket from a data structure or update a database
+    }
+  });
+
   socket.on("setup", async (userData) => {
     socket.join(userData?._id);
-    socket.emit("connected");
+    socket.emit("connected", socket.id);
     await userModel.findByIdAndUpdate(
       { _id: userData?._id },
       { isOnline: true }
     );
     socket.broadcast.emit("user online", "world");
+  });
+
+  socket.on("chat create", async (userId) => {
+    const data = await userModel.findById(userId);
+
+    io.to(data.socketId).emit("newuser joined", {
+      userId,
+      data: data.socketId,
+    });
   });
 
   socket.on("join chat", (room) => {
@@ -96,5 +116,12 @@ io.on("connection", (socket) => {
     );
     socket.broadcast.emit("user online", "world");
     socket.leave(userData._id);
+  });
+
+  socket.on("pingTimeout", (user) => {
+    // Perform actions when a pingTimeout occurs
+    console.log("Ping timeout occurred for socket:", user, socket.id);
+    // Perform custom cleanup or other operations
+    // For example, you might remove the disconnected socket from a data structure or update a database
   });
 });

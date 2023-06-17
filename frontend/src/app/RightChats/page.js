@@ -163,7 +163,12 @@ const RightChats = () => {
                         </div>
                       ) : (
                         <div className="ClientMessage d-flex justify-content-start  gap-3 align-items-center">
-                          <img src={ele.sender.pic} width={50} />
+                          <img
+                            width={40}
+                            height={40}
+                            style={{ borderRadius: "50%", objectFit: "cover" }}
+                            src={`${Api_URL}/uploads/${ele.sender.pic}`}
+                          />
 
                           <p key={Math.random()}>{ele.content}</p>
                         </div>

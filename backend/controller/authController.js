@@ -78,7 +78,6 @@ const authLogin = async (req, res) => {
 };
 
 const authLogout = async (req, res) => {
-  //   console.log(req.headers["auth-token"], "header");
   let tokenHeader = req.headers["auth-token"];
 
   if (!tokenHeader) {
@@ -86,10 +85,8 @@ const authLogout = async (req, res) => {
   }
 
   let jwtResult = await jwtDecode(tokenHeader);
-  // console.log(jwtResult, "jwtResultjwtResult");
 
   let loggedUser = await authUser.findOne({ _id: jwtResult.id });
-  // console.log(loggedUser, "loggedUserloggedUser");
 
   if (!loggedUser || loggedUser.token !== tokenHeader) {
     return res.send("ACCESS DENIED. PLEASE CHECK YOUR TOKEN");

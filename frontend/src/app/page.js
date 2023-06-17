@@ -1,6 +1,6 @@
 "use client";
 
-import Page from "./dashboard/page";
+import Page from "./login/page";
 import { ToastContainer } from "react-toastify";
 
 export default function Home() {

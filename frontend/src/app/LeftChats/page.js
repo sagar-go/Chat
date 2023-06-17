@@ -17,6 +17,8 @@ const LeftChats = () => {
     socket,
   } = useMyContext();
 
+  const [newUserJoined, setNewUserJoined] = useState(null);
+
   const config = {
     headers: {
       "Content-type": "application/json",
@@ -44,6 +46,19 @@ const LeftChats = () => {
   useEffect(() => {
     fetchChats();
   }, []);
+
+  useEffect(() => {
+    socket &&
+      socket.on("newuser joined", (data) => {
+        if (data.userId === user._id) {
+          fetchChats();
+        }
+      });
+
+    if (newUserJoined !== null) {
+      fetchChats();
+    }
+  });
 
   return (
     <>
@@ -73,10 +88,10 @@ const LeftChats = () => {
                     return (
                       <div className="userdata" key={Math.random()}>
                         <img
-                          width={50}
-                          height={50}
+                          width={60}
+                          height={60}
                           style={{ borderRadius: "50%", objectFit: "cover" }}
-                          src={ele.pic}
+                          src={`${Api_URL}/uploads/${ele.pic}`}
                         />
                         <p>{!e.isGroupChat && ele.name}</p>
                         {!e.isGroupChat && ele.isOnline ? (
