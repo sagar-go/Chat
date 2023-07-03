@@ -30,7 +30,7 @@ const Header = () => {
     setChats,
     allUsers,
     setAllUsers,
-    socketId,
+    notifications,
   } = useMyContext();
 
   const config = {
@@ -117,6 +117,7 @@ const Header = () => {
       >
         New GROUP Chat +{" "}
       </button>
+      {notifications.length}
       <div>
         <Modal show={show} onHide={handleClose}>
           <Modal.Body>

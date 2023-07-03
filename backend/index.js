@@ -101,6 +101,7 @@ io.on("connection", (socket) => {
   });
 
   socket.on("setup leave", async (userData) => {
+    console.log("userData", userData);
     await userModel.findByIdAndUpdate(
       { _id: userData?._id },
       { isOnline: false }

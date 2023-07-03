@@ -1,12 +1,12 @@
 "use client";
+import Signup from "./signup/page";
 
-import Page from "./login/page";
-import { ToastContainer } from "react-toastify";
-
-export default function Home() {
+const Home = () => {
   return (
     <>
-      <Page />
+      <Signup />
     </>
   );
-}
+};
+
+export default Home;

@@ -1,6 +1,7 @@
 "use client";
 import { useRouter } from "next/navigation";
 import { useEffect } from "react";
+import Signup from "../signup/page";
 
 const Protected = (WrappedComponent) => {
   const Authenticate = (props) => {
@@ -21,7 +22,7 @@ const Protected = (WrappedComponent) => {
     }, [isAuthenticated, router]);
 
     // Render the wrapped component if authenticated, or null otherwise
-    return isAuthenticated ? <WrappedComponent {...props} /> : null;
+    return isAuthenticated ? <WrappedComponent {...props} /> : <Signup />;
   };
 
   return Authenticate;

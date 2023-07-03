@@ -103,6 +103,15 @@ const Signup = () => {
               <button className="btn bg-voilet rounded-1  w-50 m-auto d-block">
                 Sign-up
               </button>
+              <div style={{ display: "flex" }}>
+                <p>Already have an account?</p>
+                <p
+                  onClick={() => router.push("/login")}
+                  style={{ color: "blue", cursor: "pointer" }}
+                >
+                  Login
+                </p>
+              </div>
             </form>
           </div>
         </div>

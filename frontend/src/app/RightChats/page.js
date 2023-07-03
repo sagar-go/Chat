@@ -8,16 +8,14 @@ import { ToastContainer, toast } from "react-toastify";
 const RightChats = () => {
   const {
     user,
-    fetchChatId,
     chatId,
-    setChatId,
     soloMsgs,
     setSoloMsgs,
     socket,
-    input,
-    setInput,
-    setChats,
     activeChatUsers,
+    chats,
+    notifications,
+    setNotifications,
   } = useMyContext();
   const inputRef = useRef(null);
 
@@ -78,7 +76,7 @@ const RightChats = () => {
       notify();
     }
   };
-
+  console.log(chatId, "ooooooooooooooo", notifications);
   useEffect(() => {
     socket &&
       socket.on("message recieved", (newMessageRecieved) => {
@@ -92,7 +90,10 @@ const RightChats = () => {
           // }
           // props.fetchChats();
           // fetchChats();
+          console.log("nnnmee", newMessageRecieved);
+          setNotifications([...notifications, newMessageRecieved]);
         } else {
+          console.log("mmm");
           setSoloMsgs([...soloMsgs, newMessageRecieved]);
         }
       });
@@ -142,6 +143,7 @@ const RightChats = () => {
     <>
       <div className="chatDataside position-relative">
         <div className="chatHistory">
+          {chats && !chats.length && <p> No Chats, Get Started Now !!</p>}
           {chatId && (
             <>
               {soloMsgs && soloMsgs.length > 0 ? (

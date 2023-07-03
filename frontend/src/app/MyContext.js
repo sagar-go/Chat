@@ -21,6 +21,7 @@ export const MyContext = ({ children }) => {
   const [activeChatUsers, setActiveChatUsers] = useState([]);
   const pathname = usePathname();
   const [socketId, setSocketId] = useState(null);
+  const [notifications, setNotifications] = useState([]);
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("loggedUser"));
@@ -127,6 +128,8 @@ export const MyContext = ({ children }) => {
           activeChatUsers,
           setActiveChatUsers,
           socketId,
+          notifications,
+          setNotifications,
         }}
       >
         {children}
