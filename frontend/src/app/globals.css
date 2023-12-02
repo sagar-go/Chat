@@ -5,9 +5,10 @@
     box-sizing: border-box;
 }
 body{
-    background-color: rgb(37, 37, 38);
-    color: #fff;
+    background-color: rgb(37, 37, 38) !important;
+    color: #fff !important;
 }
+
 .chat-border
 {
     border: 2px solid rgb(52, 52, 52);
