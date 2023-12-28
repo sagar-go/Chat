@@ -4,10 +4,11 @@ import RightChats from "../RightChats/page";
 import Header from "../Header/page";
 import Protected from "../ProtectedRoute/page";
 import { useMyContext } from "../MyContext";
-import { useEffect } from "react";
+import Loader from "../utils/Loader";
 
 const HOME = () => {
-  const { user, chats } = useMyContext();
+  const { user } = useMyContext();
+
   return (
     <div className="container">
       {<h3 className="my-4">Welcome {user && user.name} !!!</h3>}
@@ -26,6 +27,7 @@ const HOME = () => {
           </div>
         </div>
       </div>
+      {!user && <Loader/>}
     </div>
   );
 };

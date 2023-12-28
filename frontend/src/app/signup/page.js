@@ -1,18 +1,32 @@
 "use client";
 import axios from "axios";
 import { useRouter } from "next/navigation";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Api_URL } from "../utils/util";
+import { toast } from "react-toastify";
+import Loader from "../utils/Loader";
+import { useMyContext } from "../MyContext";
 
-const Signup = () => {
-  const [email, setEmail] = useState("");
+
+
+const Signup = ({user}) => {
+  const [email, setEmail] = useState(user ? user.email : "");
   const [uploadedImage, setUploadedImage] = useState(
     "https://media.istockphoto.com/id/1337144146/vector/default-avatar-profile-icon-vector.jpg?s=612x612&w=0&k=20&c=BIbFwuv7FxTWvh5S3vB6bkT0Qv8Vn8N5Ffseq84ClGI="
   );
   const [postImage, setPostImage] = useState(null);
   const [password, setPassword] = useState("");
-  const [name, setName] = useState("");
+  const [name, setName] = useState(user ? user.name : "");
   const router = useRouter();
+  const {loading,setLoading } = useMyContext();
+
+  useEffect(()=>{
+
+    return (()=>{
+      setLoading(false)
+    })
+  },[])
+
 
   const config = {
     headers: {
@@ -23,19 +37,28 @@ const Signup = () => {
   async function handleSubmit(e) {
     e.preventDefault();
 
-    if (postImage && email && postImage && name) {
+    if (email && name && password && postImage) {
       const formData = new FormData();
       formData.append("pic", postImage);
       formData.append("email", email);
       formData.append("password", password);
       formData.append("name", name);
-
+      setLoading(true)
       const data = await axios
         .post(`${Api_URL}/chat/createUser`, formData, config)
 
         .then((ele) => {
+          console.log(ele,'aaaaaaaaee')
+          if(!ele.data.success){
+            
+            toast.error(ele.data.message)
+            setLoading(false)
+            return
+          }
           router.push("/login");
         });
+    }else{
+      toast.info('Please fill all fields')
     }
   }
 
@@ -49,7 +72,7 @@ const Signup = () => {
   return (
     <div className="container">
       <div className="row justify-content-center align-items-center">
-        <div className="col-md-6">
+        <div className={user?`col-md-8`:"col-md-4"}>
           <div className="LoginPage">
             <form className="" onSubmit={handleSubmit}>
               <div className="mein-image">
@@ -101,9 +124,10 @@ const Signup = () => {
                 />
               </label>
               <button className="btn bg-voilet rounded-1  w-50 m-auto d-block">
-                Sign-up
+               {!user? 'Sign-up' : 'Update Profile'}
+               
               </button>
-              <div style={{ display: "flex" }}>
+      { !user &&       <div style={{ display: "flex", justifyContent:'center', gap:'10px',marginTop:'20px' }}>
                 <p>Already have an account?</p>
                 <p
                   onClick={() => router.push("/login")}
@@ -111,11 +135,12 @@ const Signup = () => {
                 >
                   Login
                 </p>
-              </div>
+              </div>}
             </form>
           </div>
         </div>
       </div>
+      {loading && <Loader/> }
     </div>
   );
 };

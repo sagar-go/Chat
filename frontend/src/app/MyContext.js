@@ -22,6 +22,7 @@ export const MyContext = ({ children }) => {
   const pathname = usePathname();
   const [socketId, setSocketId] = useState(null);
   const [notifications, setNotifications] = useState([]);
+  const[loading,setLoading] = useState(false)
 
   useEffect(() => {
     const userInfo = JSON.parse(localStorage.getItem("loggedUser"));
@@ -130,6 +131,7 @@ export const MyContext = ({ children }) => {
           socketId,
           notifications,
           setNotifications,
+          loading,setLoading
         }}
       >
         {children}

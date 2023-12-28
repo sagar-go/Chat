@@ -96,4 +96,8 @@ const authLogout = async (req, res) => {
   return res.send("Logout success");
 };
 
-module.exports = { authRegister, authLogin, authLogout };
+const authUpdateProfile = async (req, res) => {
+
+}
+
+module.exports = { authRegister, authLogin, authLogout,authUpdateProfile };

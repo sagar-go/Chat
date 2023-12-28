@@ -63,6 +63,7 @@ const LeftChats = () => {
   return (
     <>
       <div className="chatLists  rounded-3">
+        {console.log(activeChatUsers,'active')}
         {chats &&
           chats.map((e, ind) => {
             return (
@@ -71,6 +72,9 @@ const LeftChats = () => {
                   e._id === chatId ? "UserChat active" : "UserChat"
                 }`}
                 onClick={() => {
+                  if(chatId){
+                    socket.emit('leave chat', chatId)
+                  }
                   setChatId(e._id);
                   socket.emit("join chat", e._id);
                   let data = e.users.map((ele) => ele._id);

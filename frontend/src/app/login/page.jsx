@@ -1,17 +1,25 @@
 "use client";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 import { useMyContext } from "../MyContext";
 import { Api_URL } from "../utils/util";
 import { toast } from "react-toastify";
+import Loader from "../utils/Loader";
 // import "react-toastify/dist/react-toastify.css";
 
 const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const router = useRouter();
-  const { setUser } = useMyContext();
+  const { setUser,loading,setLoading } = useMyContext();
+
+  useEffect(()=>{
+
+    return (()=>{
+      setLoading(false)
+    })
+  },[])
 
   const config = {
     headers: {
@@ -21,6 +29,7 @@ const Login = () => {
 
   async function handleSubmit(e) {
     e.preventDefault();
+    setLoading(true)
     const data = await axios
       .post(
         `${Api_URL}/chat/login`,
@@ -29,6 +38,8 @@ const Login = () => {
       )
       .then((e) => {
         if (!e.data.success) {
+          setLoading(false)
+
           toast.error("Please check your credentials");
           return;
         } else {
@@ -38,7 +49,9 @@ const Login = () => {
 
           setTimeout(() => {
             router.push("/home");
-          }, 400);
+          }, 100);
+          // setLoading(false)
+
         }
       });
   }
@@ -46,7 +59,9 @@ const Login = () => {
     <>
       <div className="container">
         <div className="row justify-content-center align-items-center">
-          <div className="col-md-6">
+          <div className="col-md-4 lg-6">
+       
+
             <div className="LoginPage">
               <form className="" onSubmit={handleSubmit}>
                 <input
@@ -69,6 +84,7 @@ const Login = () => {
           </div>
         </div>
       </div>
+      {loading && <Loader/>}
 
       {/* SignUP */}
     </>

@@ -32,7 +32,7 @@ const registerUser = async (req, res) => {
   const userExists = await User.findOne({ email });
 
   if (userExists) {
-    return res.status(200).send("User already Exists");
+    return res.status(200).send({message:"User already Exists", success:false});
     // throw new Error("User already exists");
   }
 
@@ -56,6 +56,7 @@ const registerUser = async (req, res) => {
       isAdmin: user.isAdmin,
       pic: user.pic,
       token: token,
+      success:true
     });
   } else {
     return res.status(400).send("Some Error");

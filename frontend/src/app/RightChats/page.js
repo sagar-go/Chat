@@ -51,6 +51,7 @@ const RightChats = () => {
   };
   useEffect(() => {
     if (chatId) {
+      console.log('triggered')
       fetchAllChatMessages();
     }
   }, [chatId]);
@@ -70,6 +71,7 @@ const RightChats = () => {
         config
       );
       socket.emit("new message", data.data);
+      console.log('check2222')
       setSoloMsgs([...soloMsgs, data.data]);
       inputRef.current.value = "";
     } else {
@@ -99,29 +101,31 @@ const RightChats = () => {
       });
   });
 
-  useEffect(() => {
-    socket &&
-      socket.on("message delete2", (newMessageRecieved) => {
-        // setNewMessageRecieved(newMessageRecieved);
-        if (
-          !chatId || // if chat is not selected or doesn't match current chat
-          chatId !== newMessageRecieved.chat
-        ) {
-          // if (!notification.includes(newMessageRecieved)) {
-          //   setNotification([newMessageRecieved, ...notification]);
-          //   setFetchAgain(!fetchAgain);
-          // }
-          // props.fetchChats();
-          // fetchChats();
-        } else {
-          let temp = [...soloMsgs];
-          let result = temp.filter(
-            (ele, ind) => ele._id !== newMessageRecieved._id
-          );
-          setSoloMsgs(result);
-        }
-      });
-  });
+  // useEffect(() => {
+  //   socket &&
+  //     socket.on("message delete2", (newMessageRecieved) => {
+  //       // setNewMessageRecieved(newMessageRecieved);
+  //       if (
+  //         !chatId || // if chat is not selected or doesn't match current chat
+  //         chatId !== newMessageRecieved.chat
+  //       ) {
+  //         // if (!notification.includes(newMessageRecieved)) {
+  //         //   setNotification([newMessageRecieved, ...notification]);
+  //         //   setFetchAgain(!fetchAgain);
+  //         // }
+  //         // props.fetchChats();
+  //         // fetchChats();
+  //         console.log('here')
+  //       } else {
+  //         console.log('hereeeeeeeeeeeee')
+  //         let temp = [...soloMsgs];
+  //         let result = temp.filter(
+  //           (ele, ind) => ele._id !== newMessageRecieved._id
+  //         );
+  //         setSoloMsgs(result);
+  //       }
+  //     });
+  // });
 
   const handleDeleteMessage = async (id, index) => {
     const { data } = await axios.post(
@@ -143,6 +147,7 @@ const RightChats = () => {
     <>
       <div className="chatDataside position-relative">
         <div className="chatHistory">
+          {console.log(soloMsgs.length,chatId,'check')}
           {chats && !chats.length && <p> No Chats, Get Started Now !!</p>}
           {chatId && (
             <>
